@@ -24,7 +24,7 @@ class GenresView(Resource):
         with db.session.begin():
             db.session.add(new_genre)
 
-        return "genre created", 201
+        return "genre created", 201, {"location": f"/users/{new_genre.id}"}
 
 
 @genre_ns.route('/<int:rid>')

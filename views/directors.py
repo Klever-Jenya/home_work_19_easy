@@ -24,7 +24,7 @@ class DirectorsView(Resource):
         db.session.add(new_director)
         db.session.commit()
 
-        return "Director created", 201
+        return "Director created", 201, {"location": f"/users/{new_director.id}"}
 
 
 @director_ns.route('/<int:rid>')
