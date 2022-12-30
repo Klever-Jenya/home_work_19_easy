@@ -73,6 +73,6 @@ class AuthView(Resource):
         refresh_token = jwt.encode(data, SECRET, algorithm=ALGO)
 
         tokens = {"access_token": access_token, "refresh_token": refresh_token}
-        # генерит пару access_token и refresh_token и отдает их в виде JSON.
+
         return tokens, 201
 

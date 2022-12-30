@@ -7,7 +7,6 @@ from setup_db import db
 user_ns = Namespace('users')
 
 
-
 @user_ns.route('/')
 class UsersView(Resource):
     def get(self):
@@ -18,7 +17,7 @@ class UsersView(Resource):
     def post(self):
         req_json = request.json
         new_user = User(**req_json)
-        with db.session.begin()
+        with db.session.begin():
             db.session.add(new_user)
         return "", 201, {"location": f"/users/{new_user.id}"}
 
