@@ -1,13 +1,11 @@
 import calendar
 import datetime
 import hashlib
-# import json
 
 import jwt
 
 from flask import request
 from flask_restx import Resource, Namespace, abort
-
 
 from constants import SECRET, ALGO
 from models.user import User
@@ -29,10 +27,20 @@ class AuthView(Resource):
 
         user = db.session.query(User).filter(User.username == username).first()
 
+        if user is None:
+            return {"error": "Неверные учётные данные"}, 401
+
+        password_hash = hashlib.md5(password.encode('utf-8')).hexdigest()
+
+        if password_hash != user.password:
+            return {"error": "Неверные учётные данные"}, 401
+
         data = {
             "username": user.username,
             "role": user.role
         }
+
+        # if password_hash != user.password:
 
         min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
         data['exp'] = calendar.timegm(min30.timetuple())
@@ -75,4 +83,3 @@ class AuthView(Resource):
         tokens = {"access_token": access_token, "refresh_token": refresh_token}
 
         return tokens, 201
-
